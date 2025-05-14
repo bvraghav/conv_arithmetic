@@ -5,8 +5,13 @@ from six.moves import range
 arithmetic_files = ('bin/produce_figure templates/arithmetic_figure.txt '
                     'templates/unit.txt')
 numerical_files = 'bin/produce_figure templates/numerical_figure.txt'
+param_files = 'bin/produce_figure templates/param_figure.txt'
 
 animations = (
+    ('parametric_no_padding_no_strides',
+     ('param', 5, 3, 0, 3, 1, 1, 'convolution', False)),
+    ('parametric_padding_strides',
+     ('param', 5, 3, 1, 3, 2, 1, 'convolution', False)),
     ('no_padding_no_strides',
      ('arithmetic', 4, 2, 0, 3, 1, 1, 'convolution', False)),
     ('no_padding_no_strides_transposed',
@@ -85,14 +90,14 @@ def make_gif_section():
             'gif/{}.gif : '.format(name) +
             ' '.join(['png/{}_{:02d}.png'.format(name, i)
                       for i in range(steps)]) + '\n' +
-            '\tconvert -delay 100 -loop 0 -layers Optimize +map -dispose previous $^ $@\n' +
+            '\tmagick convert -delay 100 -loop 0 -layers Optimize +map -dispose previous $^ $@\n' +
             '\tgifsicle --batch -O3 $@\n')
     return '\n'.join(rules)
 
 
 def make_png_section():
     return ('png/%.png : pdf/%.pdf\n'
-            '\tconvert -density 600 $< -flatten -resize 25% $@\n')
+            '\tmagick convert -density 600 $< -flatten -resize 50% $@\n')
 
 
 def make_pdf_section():
@@ -104,13 +109,20 @@ def make_pdf_section():
             steps = config['output-size'] ** 2
         if config['type'] == 'arithmetic':
             dependencies = arithmetic_files
-        else:
+        elif config['type'] == 'numerical':
             dependencies = numerical_files
+        elif config['type'] == 'param':
+            dependencies = param_files
+        else:
+            raise ValueError(
+                f'Unknown config["type"]:{config["type"]}. '
+                f'Should be one of (arithmetic,numerical,param)'
+            )
         subrules = []
         for i in range(steps):
             subrules.append(
                 'pdf/{}_{:02d}.pdf : {}\n'.format(name, i, dependencies) +
-                '\t./bin/produce_figure ' +
+                '\tsource ~/miniconda3/bin/activate pl-classifier-trainer; python -m bin.produce_figure ' +
                 '{} {} {} '.format(config['type'], name, i) +
                 '--input-size={} '.format(config['input-size']) +
                 '--output-size={} '.format(config['output-size']) +

@@ -1,4 +1,4 @@
-\documentclass[class=article,border=10pt]{{standalone}}
+\documentclass[class=article,border=0pt]{{standalone}}
 \usepackage{{tikz}}
 \usepackage{{xcolor}}
 \definecolor{{blue}}{{RGB}}{{38,139,210}}
