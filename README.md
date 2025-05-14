@@ -1,5 +1,7 @@
 # Convolution arithmetic
 
+Fork of [Vincent’s original](https://github.com/vdumoulin/conv_arithmetic).
+
 A technical report on convolution arithmetic in the context of deep learning.
 
 The code and the images of this tutorial are free to use as regulated by the 
@@ -8,6 +10,19 @@ licence and subject to proper attribution:
 * \[1\] Vincent Dumoulin, Francesco Visin - [A guide to convolution arithmetic
   for deep learning](https://arxiv.org/abs/1603.07285)
   ([BibTeX](https://gist.github.com/fvisin/165ca9935392fa9600a6c94664a01214))
+
+## Parametric animations
+
+<table style="width:100%; table-layout:fixed;">
+  <tr>
+    <td><img width="250px" src="gif/parametric_no_padding_no_strides.gif"></td>
+    <td><img width="305px" src="gif/parametric_padding_strides.gif"></td>
+  </tr>
+  <tr>
+    <td>No padding, no strides</td>
+    <td>Padding, strides</td>
+  </tr>
+</table>
 
 ## Convolution animations
 
